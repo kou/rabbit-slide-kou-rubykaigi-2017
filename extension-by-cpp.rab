@@ -1,0 +1,76 @@
+= Improve extension API
+
+: subtitle
+   C++ as better language for extension
+: author
+   Kouhei Sutou
+: institution
+   ClearCode Inc.
+: content-source
+   RubyKaigi 2017
+: date
+   2017-09-18
+: allotted-time
+   35m
+: theme
+   .
+
+= Extension
+
+  * Ruby library implemented in C
+
+= Ruby API
+
+  # coderay ruby
+
+  class Sample
+    def hello
+      "Hello"
+    end
+  end
+
+= C API
+
+  # coderay c
+
+  #include <ruby.h>
+
+  static VALUE
+  rb_sample_hello(VALUE self)
+  {
+    return rb_str_new_static("Hello");
+  }
+
+  void
+  Init_sample(void)
+  {
+    VALUE sample = rb_define_class("Sample", rb_cObject);
+    rb_define_method(sample, "hello", rb_sample_hello, 0);
+  }
+
+= C++ API
+
+  # coderay cpp
+
+  #include <ruby.hpp>
+
+  void
+  Init_sample(void)
+  {
+    rb::Class("Sample", rb_cObject).
+      define_method("hello",
+                    [](VALUE self) {
+                      return rb_str_new_static("Hello");
+                    });
+  }
+
+= Ruby API
+
+  # coderay ruby
+
+  class Sample
+    define_method(:hello) do
+      "Hello"
+    end
+  end
+
