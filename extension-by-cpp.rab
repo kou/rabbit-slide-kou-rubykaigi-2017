@@ -18,6 +18,8 @@
 = Extension
 
   * Ruby library implemented in C
+    * Or in other languages such as\n
+      C++ and Objective-C
 
 = Ruby API
 
@@ -64,13 +66,63 @@
                     });
   }
 
-= Ruby API
+= Ruby API\nwithout syntax sugar
 
   # coderay ruby
 
-  class Sample
+  Sample = Class.new do
     define_method(:hello) do
       "Hello"
     end
   end
 
+= C++ API (reprise)
+
+  # coderay cpp
+
+  // Similar to Ruby API without syntax sugar!
+  rb::Class("Sample", rb_cObject).
+    define_method("hello",
+                  [](VALUE self) {
+                    return rb_str_new_static("Hello");
+                  });
+
+= Why is extension needed?
+
+  * Performance
+  * Integration with existing libraries implemented in other languages such as C and C++
+    * It's called as binding
+
+= Performance
+
+  * Extension is fast
+    * Because C/C++ is fast
+    * Especially loop
+
+= Loop: Sum
+
+  numbers = (1..100000).to_a
+  # Ruby level loop
+  numbers.inject(&:+)
+  # C level loop
+  numbers.sum
+
+= Target use case
+
+  * Mostly write your script in Ruby
+  * Implement only bottle neck as extension
+
+= e.g.: Machine Learning
+
+  * ...
+
+= Similar projects
+
+  * Rubex
+    * Extended Ruby
+  * Helix
+    * Rust + Ruby
+  * Boost.Python
+    * C++ + Python
+  * pybind11
+    * C++11 + Python
