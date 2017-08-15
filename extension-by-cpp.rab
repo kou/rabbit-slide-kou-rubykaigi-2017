@@ -116,13 +116,52 @@
 
   * ...
 
-= Similar projects
+= Writing ext is difficult
 
-  * Rubex
-    * Extended Ruby
-  * Helix
-    * Rust + Ruby
-  * Boost.Python
-    * C++ + Python
-  * pybind11
-    * C++11 + Python
+  * Require C knowledge
+  * Require Ruby C API knowledge
+  * Require how to write extension knowledge
+
+Most Rubyists don't have them
+
+= I don't want to learn...
+
+You should learn👐\n
+(('note:(if you want more performance)'))
+
+# 🎒
+# 🏫
+
+= Easy to write ext
+
+  * Assumptions
+    * Ruby knowledge
+    * Ruby C API knowledge
+  * Improve Ruby C API
+    * Ruby C API isn't bad but has some verbosities because of C
+
+= Approach
+
+  * Extend language
+    * Ruby + α syntax
+  * Based on not C
+  * Provide convenient API
+    * Enhance C API
+
+= Extend language
+
+  * Rubex: Extended Ruby
+  * Cython: Extended Python
+
+= Based on not C language
+
+  * JRuby: Java + Ruby
+  * Helix: Rust + Ruby
+  * crystal_ruby: Crystal + Ruby
+
+= Provide convenient API
+
+  * Rice: C++ + Ruby
+  * Extpp: C++ + Ruby
+  * Boost.Python: C++ + Python
+  * pybind11: C++11 + Python
