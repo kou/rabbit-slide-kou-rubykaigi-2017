@@ -101,10 +101,13 @@
 
 = Loop: Sum
 
+  # coderay ruby
+
   numbers = (1..100000).to_a
-  # Ruby level loop
+  # Ruby level loop: 25.1ms
   numbers.inject(&:+)
-  # C level loop
+  # C level loop:     0.5ms
+  # 50x faster
   numbers.sum
 
 = Target use case
@@ -144,7 +147,8 @@ You should learn👐\n
 
   * Extend language
     * Ruby + α syntax
-  * Based on not C
+  * Based on not C language
+    * There are many better C languages
   * Provide convenient API
     * Enhance C API
 
@@ -152,6 +156,46 @@ You should learn👐\n
 
   * Rubex: Extended Ruby
   * Cython: Extended Python
+
+= How to run
+
+  * Compile code for extended language to C
+  * Build compiled C code
+  * Load the built extension
+
+= Extended syntax
+
+  * Type information
+  * C code snippet
+
+= How to run: Rubex
+
+  # coderay ruby
+  # fibonacci.rubex
+  class Fibonacci
+    # "int" is type information
+    def compute(int n)
+      # ...
+    end
+  end
+
+= How to run: Rubex
+
+  # coderay console
+  % rubex fibonacci.rubex
+  % cd fibonacci
+  % ruby extconf.rb
+  % make
+
+= How to run: Rubex
+
+  # coderay ruby
+  require "fibonacci.so"
+  p Fibonacci.new.compute(100)
+
+= Extend language: Pros
+
+  * xxx
 
 = Based on not C language
 
