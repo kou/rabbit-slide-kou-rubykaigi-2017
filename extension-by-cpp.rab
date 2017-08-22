@@ -228,17 +228,59 @@ Need many works to maintain
   * Helix: Rust + Ruby
   * crystal_ruby: Crystal + Ruby
 
+= How to run: JRuby
+
+  # coderay java
+  // Fibonacci.java
+  public class Fibonacci {
+    public long[] compute(int n) {
+      // ...
+    }
+  }
+
+= How to run: JRuby
+
+  # coderay console
+  % javac Fibonacci.java
+  % jar cf fibonacci.jar Fibonacci.class
+
+= How to run: JRuby
+
+  # coderay ruby
+  require "fibonacci.jar"
+  java_import "Fibonacci"
+  p Fibonacci.new.compute(100)
+
 = Based on not C: Pros
 
   * Easy to write than C
   * Rich features than C
   * Can use libraries in base language
 
-= Based on not C: Cons
+= Based on not C: Cons1
 
-  * Easy to write than C
-  * Rich features than C
-  * Can use libraries in base language
+(('tag:center'))
+Need base language knowledge
+
+  * Java for JRuby
+  * Rust for Helix
+
+= Based on not C: Cons2
+
+(('tag:center'))
+May need C knowledge\n
+(('note:(When Ruby implementation is MRI)'))
+
+  * Base language wraps Ruby C API
+    * e.g.: (({sys::RSTRING_PTR})) on Helix
+
+= Based on not C: Cons3
+
+(('tag:center'))
+May need many works to maintain\n
+(('note:(When Ruby implementation is MRI)'))
+
+  * Ruby introduces a new API then base language may need to implement it
 
 = Provide convenient API
 
@@ -246,3 +288,7 @@ Need many works to maintain
   * Extpp: C++ + Ruby
   * Boost.Python: C++ + Python
   * pybind11: C++11 + Python
+
+= How to run: Rice
+
+...
