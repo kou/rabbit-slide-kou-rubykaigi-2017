@@ -195,13 +195,50 @@ You should learn👐\n
 
 = Extend language: Pros
 
-  * xxx
+  * Friendly syntax for base language users
+  * Easy to migrate from base language
+  * Don't require large C knowledge
+
+= Extend language: Cons1
+
+(('tag:center'))
+You realize that it's not friendly syntax when you use it
+
+  * Small differences will confuse you
+
+= Extend language: Cons2
+
+(('tag:center'))
+Difficult to debug
+
+  * Need base language, extend language and C knowledge
+
+(('note:Cython has GDB integration to solve this problem'))
+
+= Extend language: Cons3
+
+(('tag:center'))
+Need many works to maintain
+
+  * Base language introduces a new syntax then extend language should implement it
 
 = Based on not C language
 
   * JRuby: Java + Ruby
   * Helix: Rust + Ruby
   * crystal_ruby: Crystal + Ruby
+
+= Based on not C: Pros
+
+  * Easy to write than C
+  * Rich features than C
+  * Can use libraries in base language
+
+= Based on not C: Cons
+
+  * Easy to write than C
+  * Rich features than C
+  * Can use libraries in base language
 
 = Provide convenient API
 

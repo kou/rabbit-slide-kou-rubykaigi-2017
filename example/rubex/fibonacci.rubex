@@ -1,0 +1,16 @@
+class Fibonacci
+  def compute(int n)
+    int i = 1, prev = 1, current = 1, temp
+    arr = []
+
+    while i < n do
+      temp = current
+      current = current + prev
+      prev = temp
+      arr.push(prev)
+      i += 1
+    end
+
+    return arr
+  end
+end
