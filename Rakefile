@@ -27,4 +27,12 @@ namespace :example do
       end
     end
   end
+
+  desc "Build JRuby example"
+  task :jruby do
+    cd("example/jruby") do
+      sh("javac", "Fibonacci.java")
+      sh("jar", "cf", "fibonacci.jar", "Fibonacci.class")
+    end
+  end
 end

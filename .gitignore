@@ -3,3 +3,5 @@
 /pkg/
 /pdf/
 /example/rubex/fibonacci/
+*.class
+*.jar
