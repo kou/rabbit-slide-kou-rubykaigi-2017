@@ -1,7 +1,11 @@
+*.class
+*.jar
+*.o
+*.so
 .DS_Store
 /.tmp/
 /pkg/
 /pdf/
 /example/rubex/fibonacci/
-*.class
-*.jar
+/example/cpp/fibonacci
+/example/extpp/Makefile

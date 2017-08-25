@@ -143,7 +143,7 @@ You should learn👐\n
   * Improve Ruby C API
     * Ruby C API isn't bad but has some verbosities because of C
 
-= Approach
+= Approaches
 
   * Extend language
     * Ruby + α syntax
@@ -190,7 +190,7 @@ You should learn👐\n
 = How to run: Rubex
 
   # coderay ruby
-  require "fibonacci.so"
+  require_relative "fibonacci.so"
   p Fibonacci.new.compute(100)
 
 = Extend language: Pros
@@ -218,7 +218,8 @@ Difficult to debug
 = Extend language: Cons3
 
 (('tag:center'))
-Need many works to maintain
+Need many works to maintain\n
+(('note:(For authors, not for users)'))
 
   * Base language introduces a new syntax then extend language should implement it
 
@@ -285,10 +286,112 @@ May need many works to maintain\n
 = Provide convenient API
 
   * Rice: C++ + Ruby
-  * Extpp: C++ + Ruby
+  * Ext++: C++ + Ruby
   * Boost.Python: C++ + Python
   * pybind11: C++11 + Python
 
 = How to run: Rice
 
-...
+  # coderay cpp
+
+  #include <rice/Class.hpp>
+
+  static const char * // Not VALUE!
+  rb_sample_hello(Rice::Object self) {
+    return "Hello";
+  }
+
+  extern "C" void Init_sample() {
+    Rice::define_class("Sample").
+      define_method("hello", &rb_sample_hello);
+  }
+
+= How to run: Rice
+
+  # coderay ruby
+
+  # extconf.rb
+  require "mkmf-rice"
+  create_makefile("sample")
+
+= How to run: Rice
+
+  # coderay console
+
+  % ruby extconf.rb
+  % make
+
+= How to run: Rice
+
+  # coderay ruby
+
+  require_relative "sample.so"
+  p Sample.new.hello
+  # => "Hello"
+
+= Provide C++ API: Pros1
+
+(('tag:center'))
+Easy to write than C
+
+  * Auto type conversion
+  * Auto exception conversion
+
+= Provide C++ API: Pros2
+
+(('tag:center'))
+Easy to maintain\n
+(('note:(For authors, not for users)'))
+
+  * Can use C directly including macro
+  * Don't need wrapper for C API\n
+    (('note:(Wrapped API may be useful)'))
+
+= Provide C++ API: Pros3
+
+(('tag:center'))
+Easy to debug\n
+(('note:if you have C knowledge'))
+
+  * Can use GDB/LLDB directly
+    * GDB/LLDB have built-in C++ support
+
+= Provide C++ API: Cons1
+
+(('tag:center'))
+Require C and C++ knowledge
+
+  * Many Rubyists don't have
+
+= Provide C++ API: Cons2
+
+(('tag:center'))
+Converting from Ruby may be board
+
+  * Ruby provides powerful syntax to users
+  * C++ with convenience Ruby C API needs more codes than Ruby
+
+= From Ruby: Ext++
+
+  # coderay ruby
+  def fib(n)
+    prev = 1
+    current = 1
+    1.step(n - 1).collect do
+      prev, current = current, current + prev
+      prev
+    end
+  end
+
+= From Ruby: Ext++
+
+  # coderay cpp
+  std::vector<uint64_t> fib(n)
+    prev = 1
+    current = 1
+    1.step(n - 1).collect do
+      prev, current = current, current + prev
+      prev
+    end
+  end
+
