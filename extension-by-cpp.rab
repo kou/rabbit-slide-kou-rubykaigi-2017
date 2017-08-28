@@ -1,7 +1,8 @@
-= Improve extension API
+= Improve extension API\n(('note:拡張ライブラリーAPIの改良'))
 
 : subtitle
-   C++ as better language for extension
+   C++ as better language for extension\n
+   (('note:C++で拡張ライブラリーを開発しやすくなる'))
 : author
    Kouhei Sutou
 : institution
@@ -15,11 +16,69 @@
 : theme
    .
 
-= Extension
+= Ad1: Silver sponsor
 
-  * Ruby library implemented in C
+  # img
+  # src = images/clear-code-silver-sponsor.png
+  # relative_height = 100
+  # reflect_ratio = 0.1
+
+== Slide properties
+
+: enable-title-on-image
+   false
+
+= Ad2: Red Data Tools
+
+  * Project that provides data processing tools for Ruby\n
+    (('note:Ruby用のデータ処理ツール群を提供するプロジェクト'))
+    * https://red-data-tools.github.io/
+  * Workshop in afternoon break at the 2nd day (today!)\n
+    (('note:2日目（今日！）の午後休憩中にワークショップがあるよ！'))
+
+= Ad3: OSS Gate
+
+  * Project that increases people who join OSS development\n
+    (('note:OSSの開発に継続的に参加する人を継続的に増やす取り組み'))
+    * https://oss-gate.github.io/
+
+= Ad3: OSS Gate
+
+  * Ruby is an OSS\n
+    (('note:RubyもOSS'))
+    * OSS Gate wants to increase people to join Ruby itself and RubyGems development!\n
+      (('note:OSS GateではRuby本体の開発や各種RubyGemの開発に参加する人も増やしたい！'))
+
+= Ad3: OSS Gate
+
+  * Now, works on Tokyo, Sapporo, Osaka and Kyoto\n
+    (('note:現在は東京・札幌・大阪・京都で活動中'))
+    * If you live at one of them, join "OSS Gate workshop"!\n
+      (('note:これらの地域に住んでいる人は「OSS Gateワークショップ」に参加しよう！'))
+
+= Ad3: OSS Gate
+
+  * Wants to work on Hiroshima and other areas all over the world!\n
+    (('note:広島や世界中のいろんな地域で活動したい！'))
+    * If you're interested in increasing people who join OSS development, talk to me!\n
+      (('note:OSSの開発に参加する人が増えることに興味のある人は私に声をかけて！'))
+
+= Abstract\n(('note:概要'))
+
+  * Show some approaches to write extensions\n
+    (('note:拡張ライブラリーの書き方をいくつか紹介'))
+  * Describe C++ approach deeply\n
+    (('note:C++を使った方法の詳細を説明'))
+    * Because I recommend the approach!\n
+      (('note:C++を使った方法が一番いいと思っているから！'))
+
+= Extension\n(('note:拡張ライブラリー'))
+
+  * Ruby library implemented in C\n
+    (('note:Cで実装されたRubyのライブラリー'))
     * Or in other languages such as\n
-      C++ and Objective-C
+      C++ and Objective-C\n
+      (('note:C++やObjective-Cなど他の言語での実装でもよい'))
 
 = Ruby API
 
@@ -386,12 +445,16 @@ Converting from Ruby may be board
 = From Ruby: Ext++
 
   # coderay cpp
-  std::vector<uint64_t> fib(n)
-    prev = 1
-    current = 1
-    1.step(n - 1).collect do
-      prev, current = current, current + prev
-      prev
-    end
-  end
+  std::vector<uint64_t> fib(int n) {
+    uint64_t prev = 1
+    uint64_t current = 1
+    std::vector<uint64_t> numbers;
+    for (int i = 1; i < n; ++i) {
+      numbers.push_back(current);
+      auto temp = current;
+      current += prev;
+      prev = temp;
+    }
+    return numbers;
+  }
 
