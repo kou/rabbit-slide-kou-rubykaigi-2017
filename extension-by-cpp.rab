@@ -2,7 +2,7 @@
 
 : subtitle
    C++ as better language for extension\n
-   (('note:C++で拡張ライブラリーを開発しやすくなる'))
+   (('note:C++で拡張ライブラリーを開発しやすくする'))
 : author
    Kouhei Sutou
 : institution
@@ -125,7 +125,7 @@
                     });
   }
 
-= Ruby API\nwithout syntax sugar
+= Ruby API\nwithout syntax sugar\n(('note:シンタックスシュガーなし'))
 
   # coderay ruby
 
@@ -135,28 +135,34 @@
     end
   end
 
-= C++ API (reprise)
+= C++ API (reprise)\n(('note:（再掲）'))
 
   # coderay cpp
 
   // Similar to Ruby API without syntax sugar!
+  // シンタックスシュガーなしのRuby APIと似ている！
   rb::Class("Sample", rb_cObject).
     define_method("hello",
                   [](VALUE self) {
                     return rb_str_new_static("Hello");
                   });
 
-= Why is extension needed?
+= Why is extension needed?\n(('note:拡張ライブラリーが必要な時'))
 
-  * Performance
-  * Integration with existing libraries implemented in other languages such as C and C++
-    * It's called as binding
+  * Performance(('note:（性能）'))
+  * Integration with existing libraries implemented in other languages such as C\n
+    (('note:他言語で実装されたライブラリーを利用する'))
+    * It's called as binding\n
+      (('note:バインディングと呼ばれているもの'))
 
-= Performance
+= Performance\n(('note:性能'))
 
-  * Extension is fast
-    * Because C/C++ is fast
-    * Especially loop
+  * Extension is fast\n
+    (('note:拡張ライブラリーは速い'))
+    * Because C/C++ is fast\n
+      (('note:C/C++が速いから'))
+    * Especially loop\n
+      (('note:特にループするやつが速い'))
 
 = Loop: Sum
 
@@ -166,68 +172,85 @@
   # Ruby level loop: 25.1ms
   numbers.inject(&:+)
   # C level loop:     0.5ms
-  # 50x faster
+  # 50x faster（50倍速い）
   numbers.sum
 
-= Target use case
+= Target use case\n(('note:よくある使い方'))
 
-  * Mostly write your script in Ruby
-  * Implement only bottle neck as extension
+  * Mostly write your script in Ruby\n
+    (('note:ほとんどはRubyで実装'))
+  * Implement only bottle neck as extension\n
+    (('note:ボトルネックだけ拡張ライブラリーとして実装'))
 
-= e.g.: Machine Learning
+= e.g.: Machine Learning\n(('note:例：機械学習'))
 
-  * ...
+  * Many array/matrix operations\n
+    (('note:配列・行列に対する演算が多い'))
 
-= Writing ext is difficult
+= Writing ext is difficult\n(('note:拡張ライブラリーの実装は難しい'))
 
-  * Require C knowledge
-  * Require Ruby C API knowledge
-  * Require how to write extension knowledge
+  * Require C knowledge\n
+    (('note:Cの知識が必要'))
+  * Require Ruby C API knowledge\n
+    (('note:RubyのC APIの知識が必要'))
 
-Most Rubyists don't have them
+(('tag:center'))
+Most Rubyists don't have them\n
+(('note:多くのRubyistはこれらの知識がない'))
 
-= I don't want to learn...
+= I don't want to learn...\n(('note:そんなの知りたくない…'))
 
 You should learn👐\n
-(('note:(if you want more performance)'))
+(('note:(if you want more performance)'))\n
+(('note:性能が欲しいなら知っておくべき'))
 
 # 🎒
 # 🏫
 
-= Easy to write ext
+= Easy to write ext\n(('note:拡張ライブラリーを簡単に実装する方法'))
 
-  * Assumptions
-    * Ruby knowledge
-    * Ruby C API knowledge
-  * Improve Ruby C API
-    * Ruby C API isn't bad but has some verbosities because of C
+  * Assumptions(('note:（前提）'))
+    * Ruby knowledge(('note:（Rubyの知識）'))
+    * Ruby C API knowledge(('note:（RubyのC APIの知識）'))
+  * Improve Ruby C API(('note:（RubyのC APIを改良）'))
+    * Ruby C API isn't bad but has some verbosities because of C\n
+      (('note:RubyのC APIは悪くないんだけどCなので冗長'))
 
-= Approaches
+= Approaches(('note:（実現方法）'))
 
-  * Extend language
-    * Ruby + α syntax
-  * Based on not C language
-    * There are many better C languages
-  * Provide convenient API
-    * Enhance C API
+  * Extend language to support writing extension\n
+    (('note:拡張ライブラリーを書けるように言語を拡張'))
+  * Based on not C language\n
+    (('note:C以外の言語を使う'))
+    * There are many better C languages\n
+      (('note:Cより便利な言語はいろいろある'))
+  * Provide convenient API\n
+    (('note:便利APIを提供'))
 
-= Extend language
+= Extend language\n(('note:言語を拡張'))
 
-  * Rubex: Extended Ruby
-  * Cython: Extended Python
+  * Rubex: Extended Ruby\n
+    (('note:Rubex：Rubyを拡張'))
+  * Cython: Extended Python\n
+    (('note:Cython：Pythonを拡張'))
 
-= How to run
+= How to run\n(('note:動かし方'))
 
-  * Compile code for extended language to C
-  * Build compiled C code
-  * Load the built extension
+  * Compile code for extended language to C\n
+    (('note:拡張言語で書かれたコードをCにコンパイル'))
+  * Build compiled C code\n
+    (('note:コンパイルされたCコードをビルド'))
+  * Load the built extension\n
+    (('note:ビルドした拡張ライブラリーを読み込む'))
 
-= Extended syntax
+= Extended syntax\n(('note:拡張された構文'))
 
-  * Type information
-  * C code snippet
+  * Type information\n
+    (('note:型情報を書ける'))
+  * C code snippet\n
+    (('note:Cのコードを書ける'))
 
-= How to run: Rubex
+= How to run: Rubex\n(('note:Rubexの動かし方'))
 
   # coderay ruby
   # fibonacci.rubex
@@ -238,7 +261,7 @@ You should learn👐\n
     end
   end
 
-= How to run: Rubex
+= How to run: Rubex\n(('note:Rubexの動かし方'))
 
   # coderay console
   % rubex fibonacci.rubex
@@ -246,49 +269,79 @@ You should learn👐\n
   % ruby extconf.rb
   % make
 
-= How to run: Rubex
+= How to run: Rubex\n(('note:Rubexの動かし方'))
 
   # coderay ruby
   require_relative "fibonacci.so"
   p Fibonacci.new.compute(100)
 
-= Extend language: Pros
-
-  * Friendly syntax for base language users
-  * Easy to migrate from base language
-  * Don't require large C knowledge
-
-= Extend language: Cons1
+= Extend language: Pros1\n(('note:拡張言語：長所1'))
 
 (('tag:center'))
-You realize that it's not friendly syntax when you use it
+Friendly syntax for base language users\n
+(('note:ベースの言語のユーザーにはなじみやすい構文'))
 
-  * Small differences will confuse you
+  * Because most syntaxes are same\n
+    (('note:構文の大部分は同じだから'))
 
-= Extend language: Cons2
+= Extend language: Pros\n(('note:拡張言語：長所2'))
 
 (('tag:center'))
-Difficult to debug
+Easy to migrate from base lang\n
+(('note:ベースの言語からの移行が容易'))
 
-  * Need base language, extend language and C knowledge
+  * Because upper compatibility\n
+    (('note:上位互換だから'))
+  * Code for base language works without modification\n
+    (('note:ベースの言語で書かれたコードは変更なしで動く'))
 
-(('note:Cython has GDB integration to solve this problem'))
+= Extend language: Pros\n(('note:拡張言語：長所3'))
 
-= Extend language: Cons3
+(('tag:center'))
+Don't require large C knowledge\n
+(('note:そんなにCの知識は必要ない'))
+
+  * Most codes can be written with base language knowledge\n
+    (('note:コードの大部分はベースの言語の知識で書ける'))
+
+= Extend language: Cons1\n(('note:拡張言語：短所1'))
+
+(('tag:center'))
+You realize that it's not friendly syntax when you use it\n
+(('note:使うとそんなになじみやすい文法ではないと気づく'))
+
+  * Small differences will confuse you\n
+    (('note:小さな違いがいろいろあってわかりにくい'))
+
+= Extend language: Cons2\n(('note:拡張言語：短所2'))
+
+(('tag:center'))
+Difficult to debug\n
+(('note:デバッグが難しい'))
+
+  * Need base language, extend language and C knowledge\n
+    (('note:ベースの言語の知識も拡張言語の知識もCの知識も必要'))
+
+(('note:Cython has GDB integration to solve this problem'))\n
+(('note:Cythonはこの問題を解決するためにGDB用の便利機能を提供'))
+
+= Extend language: Cons3\n(('note:拡張言語：短所2'))
 
 (('tag:center'))
 Need many works to maintain\n
-(('note:(For authors, not for users)'))
+(('note:(For maintainers, not for users)'))\n
+(('note:（ユーザーではなくメンテナーが）メンテナンスが大変'))
 
-  * Base language introduces a new syntax then extend language should implement it
+  * Base language introduces a new syntax then extend language should implement it\n
+    (('note:ベースの言語が新しい構文を導入→拡張言語でも実装'))
 
-= Based on not C language
+= Based on not C language\n(('note:C言語以外をベースにする'))
 
   * JRuby: Java + Ruby
   * Helix: Rust + Ruby
   * crystal_ruby: Crystal + Ruby
 
-= How to run: JRuby
+= How to run: JRuby\n(('note:JRubyでの動かし方'))
 
   # coderay java
   // Fibonacci.java
@@ -298,58 +351,79 @@ Need many works to maintain\n
     }
   }
 
-= How to run: JRuby
+= How to run: JRuby\n(('note:JRubyでの動かし方'))
 
   # coderay console
   % javac Fibonacci.java
   % jar cf fibonacci.jar Fibonacci.class
 
-= How to run: JRuby
+= How to run: JRuby\n(('note:JRubyでの動かし方'))
 
   # coderay ruby
   require "fibonacci.jar"
   java_import "Fibonacci"
   p Fibonacci.new.compute(100)
 
-= Based on not C: Pros
-
-  * Easy to write than C
-  * Rich features than C
-  * Can use libraries in base language
-
-= Based on not C: Cons1
+= Based on not C: Pros1\n(('note:C言語以外をベースにする：長所1'))
 
 (('tag:center'))
-Need base language knowledge
+Easy to write than C\n
+(('note:Cより書きやすい'))
 
-  * Java for JRuby
-  * Rust for Helix
+  * Simpler syntax\n
+    (('note:洗練された構文'))
+  * Rich features than C\n
+    (('note:Cより機能が多い'))
 
-= Based on not C: Cons2
+= Based on not C: Pros2\n(('note:C言語以外をベースにする：長所2'))
+
+(('tag:center'))
+Can use libraries in base language\n
+(('note:ベース言語のライブラリーを使える'))
+
+  * Major languages have many libraries\n
+    (('note:広く使われている言語はライブラリーも多い'))
+
+= Based on not C: Cons1\n(('note:C言語以外をベースにする：短所1'))
+
+(('tag:center'))
+Need base language knowledge\n
+(('note:ベース言語の知識が必要'))
+
+  * Java for JRuby(('note:（JRubyならJava）'))
+  * Rust for Helix(('note:（HelixならRust）'))
+
+= Based on not C: Cons2\n(('note:C言語以外をベースにする：短所2'))
 
 (('tag:center'))
 May need C knowledge\n
-(('note:(When Ruby implementation is MRI)'))
+(('note:(When Ruby implementation is MRI)'))\n
+(('note:Rubyの実装がMRIならCの知識が必要かもしれない'))
 
-  * Base language wraps Ruby C API
-    * e.g.: (({sys::RSTRING_PTR})) on Helix
+  * Base language wraps Ruby C API\n
+    (('note:ベースの言語はRubyのC APIをラップしている'))
+    * e.g.: (({sys::RSTRING_PTR})) on Helix\n
+      (('note:例：Helixならsys::RSTRING_PTRがラップしたAPI'))
 
-= Based on not C: Cons3
+= Based on not C: Cons3\n(('note:C言語以外をベースにする：短所3'))
 
 (('tag:center'))
 May need many works to maintain\n
-(('note:(When Ruby implementation is MRI)'))
+(('note:(When Ruby implementation is MRI)'))\n
+(('note:Rubyの実装がMRIならメンテナンスが大変かも'))
 
-  * Ruby introduces a new API then base language may need to implement it
+  * Ruby introduces a new API then base language may need to implement it\n
+    (('note:Rubyが新しいAPIを追加→ベース言語でも実装？'))
+    * e.g.: (({rb_gc_adjust_memory_usage()}))
 
-= Provide convenient API
+= Provide convenient API\n(('note:便利なAPIを提供'))
 
   * Rice: C++ + Ruby
   * Ext++: C++ + Ruby
   * Boost.Python: C++ + Python
   * pybind11: C++11 + Python
 
-= How to run: Rice
+= How to run: Rice\n(('note:Riceの動かし方'))
 
   # coderay cpp
 
@@ -359,13 +433,12 @@ May need many works to maintain\n
   rb_sample_hello(Rice::Object self) {
     return "Hello";
   }
-
   extern "C" void Init_sample() {
     Rice::define_class("Sample").
       define_method("hello", &rb_sample_hello);
   }
 
-= How to run: Rice
+= How to run: Rice\n(('note:Riceの動かし方'))
 
   # coderay ruby
 
@@ -373,14 +446,14 @@ May need many works to maintain\n
   require "mkmf-rice"
   create_makefile("sample")
 
-= How to run: Rice
+= How to run: Rice\n(('note:Riceの動かし方'))
 
   # coderay console
 
   % ruby extconf.rb
   % make
 
-= How to run: Rice
+= How to run: Rice\n(('note:Riceの動かし方'))
 
   # coderay ruby
 
@@ -388,49 +461,76 @@ May need many works to maintain\n
   p Sample.new.hello
   # => "Hello"
 
-= Provide C++ API: Pros1
+= Provide C++ API: Pros1\n(('note:C++ APIを提供：長所1'))
 
 (('tag:center'))
-Easy to write than C
+Easy to write than C\n
+(('note:Cより書きやすい'))
 
-  * Auto type conversion
-  * Auto exception conversion
+  * Auto type conversion\n
+    (('note:型の自動変換'))
+  * Auto exception conversion\n
+    (('note:例外の自動変換'))
 
-= Provide C++ API: Pros2
+= Provide C++ API: Pros2\n(('note:C++ APIを提供：長所2'))
 
 (('tag:center'))
 Easy to maintain\n
-(('note:(For authors, not for users)'))
+(('note:(For maintainers, not for users)'))\n
+(('note:（ユーザーではなくメンテナーが）メンテナンスしやすい'))
 
-  * Can use C directly including macro
+  * Can use C directly incl macro\n
+    (('note:マクロも含めてCの機能を直接使える'))
   * Don't need wrapper for C API\n
-    (('note:(Wrapped API may be useful)'))
+    (('note:(Wrapped API may be useful)'))\n
+    (('note:C APIをラップすると便利だろうけどラップしなくてもよい'))
 
-= Provide C++ API: Pros3
+= Provide C++ API: Pros3\n(('note:C++ APIを提供：長所3'))
 
 (('tag:center'))
 Easy to debug\n
-(('note:if you have C knowledge'))
+(('note:if you have C knowledge'))\n
+(('note:Cの知識があるならデバッグしやすい'))
 
-  * Can use GDB/LLDB directly
-    * GDB/LLDB have built-in C++ support
+  * Can use GDB/LLDB directly\n
+    (('note:GDB/LLDBを直接使える'))
+    * GDB/LLDB have built-in C++ support\n
+      (('note:GDB/LLDBは組み込みでC++をサポート'))
 
-= Provide C++ API: Cons1
-
-(('tag:center'))
-Require C and C++ knowledge
-
-  * Many Rubyists don't have
-
-= Provide C++ API: Cons2
+= Provide C++ API: Cons1\n(('note:C++ APIを提供：短所1'))
 
 (('tag:center'))
-Converting from Ruby may be board
+Require C and C++ knowledge\n
+(('note:CとC++の知識が必要'))
 
-  * Ruby provides powerful syntax to users
-  * C++ with convenience Ruby C API needs more codes than Ruby
+  * Many Rubyists don't have\n
+    (('note:多くのRubyistは両方は知らない'))
 
-= From Ruby: Ext++
+= Provide C++ API: Cons2\n(('note:C++ APIを提供：短所2'))
+
+(('tag:center'))
+C++ is difficult\n
+(('note:C++は難しい'))
+
+  * e.g.: Template\n
+    (('note:たとえばテンプレート'))
+
+= Provide C++ API: Cons3\n(('note:C++ APIを提供：短所3'))
+
+(('tag:center'))
+Slower build\n
+(('note:ビルドが遅い'))
+
+= Provide C++ API: Cons4\n(('note:C++ APIを提供：短所4'))
+
+(('tag:center'))
+Conv from Ruby may be a bother\n
+(('note:Ruby実装の移植が面倒'))
+
+  * C++ with convenient Ruby C API needs more codes than Ruby\n
+    (('note:RubyのC APIにC++の便利APIがあってもRubyよりもたくさんコードが必要'))
+
+= From Ruby: Rice\n(('note:RubyからRiceに移植'))
 
   # coderay ruby
   def fib(n)
@@ -442,18 +542,15 @@ Converting from Ruby may be board
     end
   end
 
-= From Ruby: Ext++
+= From Ruby: Rice\n(('note:RubyからRiceに移植'))
 
   # coderay cpp
-  std::vector<uint64_t> fib(int n) {
-    uint64_t prev = 1
-    uint64_t current = 1
+  std::vector<uint64_t> fib(Rice::Object self, int n) {
+    uint64_t prev = 1, current = 1;
     std::vector<uint64_t> numbers;
     for (int i = 1; i < n; ++i) {
-      numbers.push_back(current);
-      auto temp = current;
-      current += prev;
-      prev = temp;
+      auto temp = current; current += prev; prev = temp;
+      numbers.push_back(prev);
     }
     return numbers;
   }

@@ -9,3 +9,4 @@
 /example/rubex/fibonacci/
 /example/cpp/fibonacci
 /example/extpp/Makefile
+/example/rice/*/Makefile
