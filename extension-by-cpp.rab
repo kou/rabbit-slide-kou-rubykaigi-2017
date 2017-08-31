@@ -339,7 +339,6 @@ Need many works to maintain\n
 
   * JRuby: Java + Ruby
   * Helix: Rust + Ruby
-  * crystal_ruby: Crystal + Ruby
 
 = How to run: JRuby\n(('note:JRubyでの動かし方'))
 
@@ -555,3 +554,18 @@ Conv from Ruby may be a bother\n
     return numbers;
   }
 
+= Recommended approach\n(('note:オススメの実現方法'))
+
+  * Extend language to support writing extension\n
+    (('note:拡張ライブラリーを書けるように言語を拡張'))
+  * Based on not C language\n
+    (('note:C以外の言語を使う'))
+  * ((*Provide convenient API\n*))
+    (('note:便利APIを提供'))
+
+= Reason why recommended\n(('note:オススメの理由'))
+
+  * Easy to maintain by maintainers\n
+    (('note:メンテナーがメンテナンスしやすい'))
+  * Easy to debug by users\n
+    (('note:ユーザーがデバッグしやすい'))
