@@ -63,6 +63,110 @@
     * If you're interested in increasing people who join OSS development, talk to me!\n
       (('note:OSSの開発に参加する人が増えることに興味のある人は私に声をかけて！'))
 
+= What I want\n(('note:やりたいこと'))
+
+(('tag:center'))
+Improve performance\n
+with C/C++ libraries\n
+(('note:C/C++のライブラリーを使った高速化'))
+
+  * Not wanting to create binding\n
+    (('note:バインディングを作りたいわけじゃない'))
+
+= Point of improve perf\n(('note:高速化するために大事なこと'))
+
+(('tag:center'))
+Done in C/C++\n
+as much as possible\n
+(('note:できるだけC/C++内で完結させる'))
+
+  * Don't move between\n
+    C/C++ and Ruby\n
+    (('note:C/C++とRuby間でいったりきたりしない'))
+
+= Example: #sum\n(('note:例：#sum'))
+
+  # coderay ruby
+
+  numbers = (1..100000).to_a
+  # Move between C and Ruby: 25.1ms
+  numbers.inject(&:+)
+  # Done in C:                0.5ms
+  # 50x faster（50倍速い）
+  numbers.sum
+
+= Extension and binding\n(('note:バインディングと拡張ライブラリー'))
+
+  * Extension(('note:（拡張ライブラリー）'))
+    * Ruby library implemented in C\n
+      (('note:Cで実装されたRubyのライブラリー'))
+  * Binding(('note:（バインディング）'))
+    * Ruby library to use library implemented in other languages\n
+      (('note:他言語実装のライブラリを使うためのRubyのライブラリ'))
+
+= Binding usage\n(('note:バインディングの使い方'))
+
+  * Export each API to Ruby\n
+    (('note:それぞれのAPIをRubyで使えるようにする'))
+  * Combine exported APIs in Ruby\n
+    (('note:バインディングが提供するAPIをRubyレベルで組み合わせる'))
+
+= Binding usage example\n(('note:バインディングの使い方例'))
+
+  # coderay ruby
+
+  require "cairo"
+  include Cairo
+  # Combine APIs
+  s = PDFSurface.new("red.pdf", 10, 10) # API
+  context = Context.new(s)              # API
+  context.set_source_color(:red)        # API
+  context.paint                         # API
+  context.show_page                     # API
+  s.finish                              # API
+
+= Point of improve perf\n(('note:高速化するために大事なこと'))
+
+(('tag:center'))
+Done in C/C++\n
+as much as possible\n
+(('note:できるだけC/C++内で完結させる'))
+
+  * Don't move between\n
+    C/C++ and Ruby\n
+    (('note:C/C++とRuby間でいったりきたりしない'))
+
+= Improve perf example\n(('note:高速化例'))
+
+  # coderay ruby
+
+  # Don't combine APIs in Ruby
+  # RubyレベルでAPIを組み合わせない
+  ## context.set_source_color(:red) # API
+  ## context.paint                  # API
+  ## context.show_page              # API
+  # Just call higher level API in Ruby
+  # Rubyからはもっと高レベルなAPIを呼び出す
+  context.show_red_page # Implemented in C
+                        # ここはCで実装
+
+= What I want\n(('note:やりたいこと'))
+
+(('tag:center'))
+Improve performance\n
+with C/C++ libraries\n
+(('note:C/C++のライブラリーを使った高速化'))
+
+  * Not wanting to create binding\n
+    (('note:バインディングを作りたいわけじゃない'))
+
+= Use case\n(('note:高速化したい場面'))
+
+  * Machine learning\n
+    (('note:機械学習'))
+
+
+
 = Abstract\n(('note:概要'))
 
   * Show some approaches to write extensions\n
