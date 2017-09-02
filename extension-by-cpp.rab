@@ -1,8 +1,7 @@
-= Improve extension API\n(('note:拡張ライブラリーAPIの改良'))
+= Improve extension API
 
 : subtitle
-   C++ as better language for extension\n
-   (('note:C++で拡張ライブラリーを開発しやすくする'))
+   C++ as better language for extension
 : author
    Kouhei Sutou
 : institution
@@ -16,7 +15,20 @@
 : theme
    .
 
-= Ad1: Silver sponsor
+= Ad1: I'm distributing shocker combatmen to Rabbit users\n(('tag:x-small:宣伝1：Rabbitユーザーに'))\n(('tag:x-small:ショッカー戦闘員を配布中'))
+
+  # img
+  # src = images/shocker.jpeg
+  # relative_height = 110
+  # reflect_ratio = 0.1
+  # relative_margin_top = -2
+
+== Slide properties
+
+: enable-title-on-image
+   true
+
+= Ad2: Silver sponsor
 
   # img
   # src = images/clear-code-silver-sponsor.png
@@ -28,7 +40,7 @@
 : enable-title-on-image
    false
 
-= Ad2: Red Data Tools
+= Ad3: Red Data Tools
 
   * Project that provides data processing tools for Ruby\n
     (('note:Ruby用のデータ処理ツール群を提供するプロジェクト'))
@@ -36,27 +48,27 @@
   * Workshop in afternoon break at the 2nd day (today!)\n
     (('note:2日目（今日！）の午後休憩中にワークショップがあるよ！'))
 
-= Ad3: OSS Gate
+= Ad4: OSS Gate
 
   * Project that increases people who join OSS development\n
     (('note:OSSの開発に継続的に参加する人を継続的に増やす取り組み'))
     * https://oss-gate.github.io/
 
-= Ad3: OSS Gate
+= Ad4: OSS Gate
 
   * Ruby is an OSS\n
     (('note:RubyもOSS'))
     * OSS Gate wants to increase people to join Ruby itself and RubyGems development!\n
       (('note:OSS GateではRuby本体の開発や各種RubyGemの開発に参加する人も増やしたい！'))
 
-= Ad3: OSS Gate
+= Ad4: OSS Gate
 
   * Now, works on Tokyo, Sapporo, Osaka and Kyoto\n
     (('note:現在は東京・札幌・大阪・京都で活動中'))
     * If you live at one of them, join "OSS Gate workshop"!\n
       (('note:これらの地域に住んでいる人は「OSS Gateワークショップ」に参加しよう！'))
 
-= Ad3: OSS Gate
+= Ad4: OSS Gate
 
   * Wants to work on Hiroshima and other areas all over the world!\n
     (('note:広島や世界中のいろんな地域で活動したい！'))
@@ -164,17 +176,17 @@ with C/C++ libraries\n
 
   * Machine learning\n
     (('note:機械学習'))
+    * Combine array/matrix operations\n
+      (('note:配列・行列に対する演算をまとめる'))
 
-= Approaches(('note:（実現方法）'))
+= Raw C API\n(('note:生のC API'))
 
-  * Extend language to support writing extension\n
-    (('note:拡張ライブラリーを書けるように言語を拡張'))
-  * Based on not C language\n
-    (('note:C以外の言語を使う'))
-    * There are many better C languages\n
-      (('note:Cより便利な言語はいろいろある'))
-  * Provide convenient API\n
-    (('note:便利APIを提供'))
+(('tag:center'))
+Not bad but has some verbosities because of C\n
+(('note:悪くないんだけどCなので冗長'))
+
+  * Need better approach\n
+    (('note:もっといい感じの方法を使いたい'))
 
 = Requirements\n(('note:要件'))
 
@@ -184,6 +196,15 @@ with C/C++ libraries\n
     (('note:できるだけ書きやすいこと'))
   * Easy to debug (('note:as much as possible'))\n
     (('note:できるだけデバッグしやすいこと'))
+
+= Approaches(('note:（実現方法）'))
+
+  * Extend language to support writing extension\n
+    (('note:拡張ライブラリーを書けるように言語を拡張'))
+  * Based on not C language\n
+    (('note:C以外の言語を使う'))
+  * Provide convenient API\n
+    (('note:便利APIを提供'))
 
 = Recommended approach\n(('note:オススメの実現方法'))
 
@@ -341,6 +362,143 @@ Easy to debug for C API users\n
     * GDB/LLDB have built-in C++ support\n
       (('note:GDB/LLDBは組み込みでC++をサポート'))
 
+= C++ based API: Pros4\n(('note:C++ベースのAPI：長所4'))
+
+(('tag:center'))
+Easy to optimize\n
+(('note:最適化しやすい'))
+
+  * [Feature #13434] better method definition in C API\n
+    (('note:Cのメソッド定義APIの改良'))
+
+= Better method definition\n(('note:メソッド定義の改良'))
+
+  * Metadata for optimization\n
+    (('note:最適化のためにメタデータを付与'))
+    * e.g.: Reduce memory allocations\n
+      (('note:例：メモリーアロケーションを減らす'))
+  * Lazy method definition\n
+    (('note:必要になるまでメソッド定義を遅らせる'))
+    * e.g.: Reduce start-up time\n
+      (('note:例：起動時間の高速化'))
+
+= Argument metadata\n(('note:引数のメタデータ'))
+
+  # coderay ruby
+
+  class Hello
+    # Default argument is just for
+    # example. Other metadata will
+    # be more useful for optimization.
+    def hello(name, message="world")
+    end
+  end
+
+= Argument metadata\n(('note:引数のメタデータ'))
+
+  # coderay cpp
+
+  // Rice
+  cHello.
+    define_method(
+      "hello",
+      &hello,
+      (Rice::Arg("name"), // ↓Default
+       Rice::Arg("message")="world"));
+
+= Lazy method definition\n(('note:遅延メソッド定義'))
+
+  # coderay ruby
+
+  class X
+    def a; end # Not define yet
+    def b; end # Not define yet
+  end
+  x = X.new
+  x.a # Define #a and #b
+
+= Lazy method definition\n(('note:遅延メソッド定義'))
+
+  # coderay c
+
+  /* One of new C API ideas */
+  struct rb_method_entries entries[] = {
+    "a", ...,
+    "b", ...,
+  };
+  /* The definitions aren't defined at once. */
+  /* They are defined when the next method call. */
+  rb_define_method_with_table(rb_cX, entries);
+
+= Lazy method definition\n(('note:遅延メソッド定義'))
+
+  # coderay c
+
+  // C++ implementation sample
+  {
+    rb::Class("X").
+      // Don't call rb_define_method() yet.
+      define_method("a", ...).
+      // Don't call rb_define_method() yet.
+      define_method("b", ...);
+    // Destructor is called.
+    // Call rb_define_method_with_table()
+    // in destructor.
+  }
+
+= Lazy method definition\n(('note:遅延メソッド定義'))
+
+  # coderay c
+
+  // Ext++ implementation is just for test
+  rb::Class("X").
+    // Call rb_define_method() immediately.
+    define_method("a", ...).
+    // Don't call rb_define_method() in
+    // the following define_method()s.
+    enable_lazy_define_method().
+    // Don't call rb_define_method() yet.
+    define_method("b", ...);
+
+= Lazy method definition\n(('note:遅延メソッド定義'))
+
+  # coderay ruby
+
+  # Define only benchmark code in Ruby.
+  # Real benchmark code is in C++.
+  n = 10000
+  Bench = Class.new do
+    n.times do |i|
+      define_method("method#{i}") do
+      end
+    end
+  end
+
+= Lazy method definition\n(('note:遅延メソッド定義'))
+
+  # coderay ruby
+
+  # Call benchmark code in Ruby.
+  # Real benchmark code is in C++.
+  n = 10000
+  bench = Bench.new
+  n.times do |i|
+    bench.__send__("method#{i}")
+  end
+
+= Lazy method definition\n(('note:遅延メソッド定義'))
+
+  # RT
+
+  Type, Define only, Called
+
+  Normal, 0.005675s, 0.005625s
+  Lazy,   0.001142s, 0.005674s
+
+(('tag:center'))
+5x faster when any methods aren't called\n
+(('note:メソッドが呼ばれなければ5倍速い'))
+
 = C++ based API: Cons1\n(('note:C++ベースのAPI：短所1'))
 
 (('tag:center'))
@@ -361,171 +519,43 @@ Slower build\n
   * It may reduce try&error cycle\n
     (('note:試行錯誤しにくくなるかも'))
 
-= C++ based API: Problem1\n(('note:C++ベースのAPI：課題1'))
+= C++ based API: Problem\n(('note:C++ベースのAPI：課題'))
 
 (('tag:center'))
 Exception\n
 (('note:例外'))
 
-  * Ruby exception breaks C++ RAII (destructor) because it uses setjmp/longjmp\n
-    (('note:Rubyの例外はsetjmp/longjmpを使っているのでC++のRAII（デストラクター）が動かない'))
+  * Ruby exception breaks C++ RAII (destructor)\n
+    (('note:Rubyの例外発生→C++のRAII（デストラクター）が動かない'))
+    * Because it uses setjmp/longjmp\n
+      (('note:Rubyの例外はsetjmp/longjmpを使っているから'))
 
-= TODO
+= Exception: Solution\n(('note:例外：解決法'))
 
-TODO
+  (1) Rescue Ruby exception\n
+      (('note:Rubyの例外をrescue'))
+  (2) Throw C++ exception\n
+      (('note:C++の例外にしてthrow'))
+  (3) Re-raise the Ruby exception\n
+      (('note:安全な場所でRubyの例外を再raise'))
 
-= Abstract\n(('note:概要'))
+= Conclusion\n(('note:まとめ'))
 
-  * Show some approaches to write extensions\n
-    (('note:拡張ライブラリーの書き方をいくつか紹介'))
-  * Describe C++ approach deeply\n
-    (('note:C++を使った方法の詳細を説明'))
-    * Because I recommend the approach!\n
-      (('note:C++を使った方法が一番いいと思っているから！'))
+  * C++ based API is useful\n
+    (('note:C++ベースのAPIは便利'))
+    * For writing ext uses C/C++ library\n
+      (('note:C/C++のライブラリを使う拡張ライブラリを書くとき'))
+    * For optimizing w/ easy to use API\n
+      (('note:例：使いやすいAPIを維持したまま最適化するとき'))
 
-= Extension\n(('note:拡張ライブラリー'))
-
-  * Ruby library implemented in C\n
-    (('note:Cで実装されたRubyのライブラリー'))
-    * Or in other languages such as\n
-      C++ and Objective-C\n
-      (('note:C++やObjective-Cなど他の言語での実装でもよい'))
-
-= Ruby API
-
-  # coderay ruby
-
-  class Sample
-    def hello
-      "Hello"
-    end
-  end
-
-= C API
-
-  # coderay c
-
-  #include <ruby.h>
-
-  static VALUE
-  rb_sample_hello(VALUE self)
-  {
-    return rb_str_new_static("Hello");
-  }
-
-  void
-  Init_sample(void)
-  {
-    VALUE sample = rb_define_class("Sample", rb_cObject);
-    rb_define_method(sample, "hello", rb_sample_hello, 0);
-  }
-
-= C++ API
-
-  # coderay cpp
-
-  #include <ruby.hpp>
-
-  void
-  Init_sample(void)
-  {
-    rb::Class("Sample", rb_cObject).
-      define_method("hello",
-                    [](VALUE self) {
-                      return rb_str_new_static("Hello");
-                    });
-  }
-
-= Ruby API\nwithout syntax sugar\n(('note:シンタックスシュガーなし'))
-
-  # coderay ruby
-
-  Sample = Class.new do
-    define_method(:hello) do
-      "Hello"
-    end
-  end
-
-= C++ API (reprise)\n(('note:（再掲）'))
-
-  # coderay cpp
-
-  // Similar to Ruby API without syntax sugar!
-  // シンタックスシュガーなしのRuby APIと似ている！
-  rb::Class("Sample", rb_cObject).
-    define_method("hello",
-                  [](VALUE self) {
-                    return rb_str_new_static("Hello");
-                  });
-
-= Why is extension needed?\n(('note:拡張ライブラリーが必要な時'))
-
-  * Performance(('note:（性能）'))
-  * Integration with existing libraries implemented in other languages such as C\n
-    (('note:他言語で実装されたライブラリーを利用する'))
-    * It's called as binding\n
-      (('note:バインディングと呼ばれているもの'))
-
-= Performance\n(('note:性能'))
-
-  * Extension is fast\n
-    (('note:拡張ライブラリーは速い'))
-    * Because C/C++ is fast\n
-      (('note:C/C++が速いから'))
-    * Especially loop\n
-      (('note:特にループするやつが速い'))
-
-= Loop: Sum
-
-  # coderay ruby
-
-  numbers = (1..100000).to_a
-  # Ruby level loop: 25.1ms
-  numbers.inject(&:+)
-  # C level loop:     0.5ms
-  # 50x faster（50倍速い）
-  numbers.sum
-
-= Target use case\n(('note:よくある使い方'))
-
-  * Mostly write your script in Ruby\n
-    (('note:ほとんどはRubyで実装'))
-  * Implement only bottle neck as extension\n
-    (('note:ボトルネックだけ拡張ライブラリーとして実装'))
-
-= e.g.: Machine Learning\n(('note:例：機械学習'))
-
-  * Many array/matrix operations\n
-    (('note:配列・行列に対する演算が多い'))
-
-= Writing ext is difficult\n(('note:拡張ライブラリーの実装は難しい'))
-
-  * Require C knowledge\n
-    (('note:Cの知識が必要'))
-  * Require Ruby C API knowledge\n
-    (('note:RubyのC APIの知識が必要'))
+= Appendix\n(('note:付録'))
 
 (('tag:center'))
-Most Rubyists don't have them\n
-(('note:多くのRubyistはこれらの知識がない'))
+Introduce easy to write extension approaches\n
+(('note:拡張ライブラリーを簡単に実装する方法を紹介'))
 
-= I don't want to learn...\n(('note:そんなの知りたくない…'))
-
-You should learn👐\n
-(('note:(if you want more performance)'))\n
-(('note:性能が欲しいなら知っておくべき'))
-
-# 🎒
-# 🏫
-
-= Easy to write ext\n(('note:拡張ライブラリーを簡単に実装する方法'))
-
-  * Assumptions(('note:（前提）'))
-    * Ruby knowledge(('note:（Rubyの知識）'))
-    * Ruby C API knowledge(('note:（RubyのC APIの知識）'))
-  * Improve Ruby C API(('note:（RubyのC APIを改良）'))
-    * Ruby C API isn't bad but has some verbosities because of C\n
-      (('note:RubyのC APIは悪くないんだけどCなので冗長'))
+  * The following contents are used only when time is remained\n
+    (('note:以降の内容は時間が残っている場合だけ使う'))
 
 = Approaches(('note:（実現方法）'))
 
@@ -533,8 +563,6 @@ You should learn👐\n
     (('note:拡張ライブラリーを書けるように言語を拡張'))
   * Based on not C language\n
     (('note:C以外の言語を使う'))
-    * There are many better C languages\n
-      (('note:Cより便利な言語はいろいろある'))
   * Provide convenient API\n
     (('note:便利APIを提供'))
 
@@ -592,7 +620,7 @@ You should learn👐\n
 Friendly syntax for base language users\n
 (('note:ベースの言語のユーザーにはなじみやすい構文'))
 
-  * Because most syntaxes are same\n
+  * Most syntaxes are same\n
     (('note:構文の大部分は同じだから'))
 
 = Extend language: Pros\n(('note:拡張言語：長所2'))
@@ -771,67 +799,17 @@ May need many works to maintain\n
   p Sample.new.hello
   # => "Hello"
 
-= Provide C++ API: Pros1\n(('note:C++ APIを提供：長所1'))
+= Provide C++ API: Pros\n(('note:C++ APIを提供：長所'))
 
-(('tag:center'))
-Easy to write than C\n
-(('note:Cより書きやすい'))
+Omit\n
+(('note:省略'))
 
-  * Auto type conversion\n
-    (('note:型の自動変換'))
-  * Auto exception conversion\n
-    (('note:例外の自動変換'))
+= Provide C++ API: Cons\n(('note:C++ APIを提供：短所'))
 
-= Provide C++ API: Pros2\n(('note:C++ APIを提供：長所2'))
+Omit\n
+(('note:省略'))
 
-(('tag:center'))
-Easy to maintain\n
-(('note:(For maintainers, not for users)'))\n
-(('note:（ユーザーではなくメンテナーが）メンテナンスしやすい'))
-
-  * Can use C directly incl macro\n
-    (('note:マクロも含めてCの機能を直接使える'))
-  * Don't need wrapper for C API\n
-    (('note:(Wrapped API may be useful)'))\n
-    (('note:C APIをラップすると便利だろうけどラップしなくてもよい'))
-
-= Provide C++ API: Pros3\n(('note:C++ APIを提供：長所3'))
-
-(('tag:center'))
-Easy to debug\n
-(('note:if you have C knowledge'))\n
-(('note:Cの知識があるならデバッグしやすい'))
-
-  * Can use GDB/LLDB directly\n
-    (('note:GDB/LLDBを直接使える'))
-    * GDB/LLDB have built-in C++ support\n
-      (('note:GDB/LLDBは組み込みでC++をサポート'))
-
-= Provide C++ API: Cons1\n(('note:C++ APIを提供：短所1'))
-
-(('tag:center'))
-Require C and C++ knowledge\n
-(('note:CとC++の知識が必要'))
-
-  * Many Rubyists don't have\n
-    (('note:多くのRubyistは両方は知らない'))
-
-= Provide C++ API: Cons2\n(('note:C++ APIを提供：短所2'))
-
-(('tag:center'))
-C++ is difficult\n
-(('note:C++は難しい'))
-
-  * e.g.: Template\n
-    (('note:たとえばテンプレート'))
-
-= Provide C++ API: Cons3\n(('note:C++ APIを提供：短所3'))
-
-(('tag:center'))
-Slower build\n
-(('note:ビルドが遅い'))
-
-= Provide C++ API: Cons4\n(('note:C++ APIを提供：短所4'))
+= Provide C++ API: ConsN\n(('note:C++ APIを提供：短所N'))
 
 (('tag:center'))
 Conv from Ruby may be a bother\n
@@ -864,19 +842,3 @@ Conv from Ruby may be a bother\n
     }
     return numbers;
   }
-
-= Recommended approach\n(('note:オススメの実現方法'))
-
-  * Extend language to support writing extension\n
-    (('note:拡張ライブラリーを書けるように言語を拡張'))
-  * Based on not C language\n
-    (('note:C以外の言語を使う'))
-  * ((*Provide convenient API\n*))
-    (('note:便利APIを提供'))
-
-= Reason why recommended\n(('note:オススメの理由'))
-
-  * Easy to maintain by maintainers\n
-    (('note:メンテナーがメンテナンスしやすい'))
-  * Easy to debug by users\n
-    (('note:ユーザーがデバッグしやすい'))
