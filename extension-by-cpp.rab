@@ -63,7 +63,7 @@
     * If you're interested in increasing people who join OSS development, talk to me!\n
       (('note:OSSの開発に参加する人が増えることに興味のある人は私に声をかけて！'))
 
-= What I want\n(('note:やりたいこと'))
+= What I want to do\n(('note:やりたいこと'))
 
 (('tag:center'))
 Improve performance\n
@@ -150,7 +150,7 @@ as much as possible\n
   context.show_red_page # Implemented in C
                         # ここはCで実装
 
-= What I want\n(('note:やりたいこと'))
+= What I want to do\n(('note:やりたいこと'))
 
 (('tag:center'))
 Improve performance\n
@@ -165,7 +165,214 @@ with C/C++ libraries\n
   * Machine learning\n
     (('note:機械学習'))
 
+= Approaches(('note:（実現方法）'))
 
+  * Extend language to support writing extension\n
+    (('note:拡張ライブラリーを書けるように言語を拡張'))
+  * Based on not C language\n
+    (('note:C以外の言語を使う'))
+    * There are many better C languages\n
+      (('note:Cより便利な言語はいろいろある'))
+  * Provide convenient API\n
+    (('note:便利APIを提供'))
+
+= Requirements\n(('note:要件'))
+
+  * Easy to use C/C++ libraries\n
+    (('note:C/C++のライブラリーを簡単に使えること'))
+  * Easy to write (('note:as much as possible'))\n
+    (('note:できるだけ書きやすいこと'))
+  * Easy to debug (('note:as much as possible'))\n
+    (('note:できるだけデバッグしやすいこと'))
+
+= Recommended approach\n(('note:オススメの実現方法'))
+
+  * Extend language to support writing extension\n
+    (('note:拡張ライブラリーを書けるように言語を拡張'))
+  * Based on not C language\n
+    (('note:C以外の言語を使う'))
+  * ((*Provide convenient API*))\n
+    (('note:便利APIを提供'))
+
+= Provide convenient API\n(('note:便利なAPIを提供'))
+
+  * Rice: ((*C++*)) + Ruby
+  * Ext++: ((*C++*))11 + Ruby
+  * Boost.Python: ((*C++*)) + Python
+  * pybind11: ((*C++*))11 + Python
+
+= Convenient API and C++\n(('note:便利なAPIとC++'))
+
+  * C++ can use C API directory\n
+    (('note:C++ではCのAPIを直接使える'))
+    * No need wrapper API nor libffi\n
+      (('note:ラッパーAPIもlibffiもいらない'))
+  * C++ has many convenient features\n
+    (('note:C++には便利機能がたくさんある'))
+
+= Convenient API example1\n(('note:便利なAPI例1'))
+
+  # coderay ruby
+
+  # Ruby: Normal
+  class Sample
+    def hello
+      "Hello"
+    end
+  end
+
+= Convenient API example1\n(('note:便利なAPI例1'))
+
+  # coderay ruby
+
+  # Ruby: No syntax sugar
+  Sample = Class.new do
+    define_method(:hello) do
+      "Hello"
+    end
+  end
+
+= Convenient API example1\n(('note:便利なAPI例1'))
+
+  # coderay cpp
+
+  // C++: Ext++
+  #include <ruby.hpp>
+  extern "C" void Init_sample(void) {
+    rb::Class("Sample"). // class Sample in Ruby
+      define_method("hello", // def hello in Ruby
+        [](VALUE self) { // lambda {|| "Hello"} in Ruby
+          return rb_str_new_static("Hello");
+        });
+  }
+
+= Convenient API example1\n(('note:便利なAPI例1'))
+
+  # coderay c
+
+  /* C */
+  #include <ruby.h>
+  static VALUE rb_sample_hello(VALUE self) {
+    return rb_str_new_static("Hello");
+  }
+  void Init_sample(void) {
+    VALUE sample = rb_define_class("Sample", rb_cObject);
+    rb_define_method(sample, "hello", rb_sample_hello, 0);
+  }
+
+= Convenient API example2\n(('note:便利なAPI例2'))
+
+  # coderay cpp
+
+  // C++: Rice
+  #include <rice/Class.hpp>
+  static const char * // Not VALUE! (Auto convert)
+  rb_sample_hello(Rice::Object self) {
+    return "Hello";
+  }
+  extern "C" void Init_sample() {
+    Rice::define_class("Sample").
+      define_method("hello", &rb_sample_hello);
+  }
+
+= Convenient C++ API1\n(('note:便利なC++ API1'))
+
+  * Default arguments(('note:（デフォルト引数）'))
+    * Parent class is omittable\n
+      (('note:RubyのAPIのように親クラスを省略可能'))
+  * Template(('note:（テンプレート）'))
+    * Auto C/C++ <-> Ruby convert\n
+      (('note:C/C++↔Ruby間の自動変換'))
+
+= Convenient API example3
+
+  # coderay cpp
+
+  // C++11
+  #include <iostream>
+  #include <xtensor/xarray.hpp>
+  int main(void) {
+    xt::xarray<double> array = {1.0, 2.0, 3.0};
+    // Type deduction. Operator overloading.
+    auto result = (array + 2.0) * 3.0; // element-wise ops
+    for (const auto &element : result) { // result.each {}
+      std::cout << element << std::endl; // 9 12 15
+    }
+    return 0;
+  }
+
+= Convenient C++ API2\n(('note:便利なC++ API2'))
+
+  * auto: Type deduction(('note:（型推論）'))
+    * Simpler code\n
+      (('note:コードがシンプルになる'))
+  * Range-based for loop(('note:（範囲forループ）'))
+    * Simpler code\n
+      (('note:コードがシンプルになる'))
+
+= C++ based API: Pros1\n(('note:C++ベースのAPI：長所1'))
+
+(('tag:center'))
+Easy to write than C\n
+(('note:Cより書きやすい'))
+
+  * Require C++11 or later\n
+    (('note:C++11以降なら'))
+
+= C++ based API: Pros2\n(('note:C++ベースのAPI：長所2'))
+
+(('tag:center'))
+Easy to use for C API users\n
+(('note:既存のC APIを使っている人なら使いやすい'))
+
+  * Can use C directly incl macro\n
+    (('note:マクロも含めてCの機能を直接使える'))
+  * Don't need to migrate to all convenient API at once\n
+    (('note:一気に書き換えるのではなく徐々に移行できる'))
+
+= C++ based API: Pros3\n(('note:C++ベースのAPI：長所3'))
+
+(('tag:center'))
+Easy to debug for C API users\n
+(('note:既存のC APIを使っている人ならデバッグしやすい'))
+
+  * Can use GDB/LLDB directly\n
+    (('note:GDB/LLDBを直接使える'))
+    * GDB/LLDB have built-in C++ support\n
+      (('note:GDB/LLDBは組み込みでC++をサポート'))
+
+= C++ based API: Cons1\n(('note:C++ベースのAPI：短所1'))
+
+(('tag:center'))
+C++ is difficult\n
+(('note:C++は難しい'))
+
+  * e.g.: Template\n
+    (('note:たとえばテンプレート'))
+  * Easy to write unreadable code\n
+    (('note:簡単にリーダブルじゃないコードを書ける'))
+
+= C++ based API: Cons2\n(('note:C++ベースのAPI：短所2'))
+
+(('tag:center'))
+Slower build\n
+(('note:ビルドが遅い'))
+
+  * It may reduce try&error cycle\n
+    (('note:試行錯誤しにくくなるかも'))
+
+= C++ based API: Problem1\n(('note:C++ベースのAPI：課題1'))
+
+(('tag:center'))
+Exception\n
+(('note:例外'))
+
+  * Ruby exception breaks C++ RAII (destructor) because it uses setjmp/longjmp\n
+    (('note:Rubyの例外はsetjmp/longjmpを使っているのでC++のRAII（デストラクター）が動かない'))
+
+= TODO
+
+TODO
 
 = Abstract\n(('note:概要'))
 
