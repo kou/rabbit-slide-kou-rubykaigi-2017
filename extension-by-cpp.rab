@@ -548,6 +548,11 @@ Exception\n
     * For optimizing w/ easy to use API\n
       (('note:例：使いやすいAPIを維持したまま最適化するとき'))
 
+== Slide properties
+
+: image-slide-number-last-slide
+   true
+
 = Appendix\n(('note:付録'))
 
 (('tag:center'))
