@@ -107,6 +107,17 @@ as much as possible\n
   # 50x faster（50倍速い）
   numbers.sum
 
+= FYI: #inject(symbol)\n(('note:参考情報：#inject(symbol)'))
+
+  # coderay ruby
+
+  numbers = (1..100000).to_a
+  # Move between C and Ruby: 25.1ms
+  numbers.inject(&:+)
+  # Done in C:                0.5ms
+  # 50x faster（50倍速い）
+  numbers.inject(:+)
+
 = Extension and binding\n(('note:バインディングと拡張ライブラリー'))
 
   * Extension(('note:（拡張ライブラリー）'))
@@ -179,7 +190,7 @@ with C/C++ libraries\n
     * Combine array/matrix operations\n
       (('note:配列・行列に対する演算をまとめる'))
 
-= Raw C API\n(('note:生のC API'))
+= Raw C API for extension\n(('note:拡張ライブラリー用の生のC API'))
 
 (('tag:center'))
 Not bad but has some verbosities because of C\n
@@ -262,7 +273,7 @@ Not bad but has some verbosities because of C\n
   extern "C" void Init_sample(void) {
     rb::Class("Sample"). // class Sample in Ruby
       define_method("hello", // def hello in Ruby
-        [](VALUE self) { // lambda {|| "Hello"} in Ruby
+        [](VALUE self) { // ->() {"Hello"} in Ruby
           return rb_str_new_static("Hello");
         });
   }
@@ -275,9 +286,10 @@ Not bad but has some verbosities because of C\n
   #include <ruby.h>
   static VALUE rb_sample_hello(VALUE self) {
     return rb_str_new_static("Hello");
-  }
+  } /* ↑Definition. */
   void Init_sample(void) {
     VALUE sample = rb_define_class("Sample", rb_cObject);
+    /* ↓Registration. They are separated. */
     rb_define_method(sample, "hello", rb_sample_hello, 0);
   }
 
