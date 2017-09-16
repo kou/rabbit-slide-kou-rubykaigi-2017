@@ -82,7 +82,7 @@ Improve performance\n
 with C/C++ libraries\n
 (('note:C/C++のライブラリーを使った高速化'))
 
-  * Not wanting to create binding\n
+  * Not want to create binding\n
     (('note:バインディングを作りたいわけじゃない'))
 
 = Point of improve perf\n(('note:高速化するために大事なこと'))
@@ -180,7 +180,7 @@ Improve performance\n
 with C/C++ libraries\n
 (('note:C/C++のライブラリーを使った高速化'))
 
-  * Not wanting to create binding\n
+  * Not want to create binding\n
     (('note:バインディングを作りたいわけじゃない'))
 
 = Use case\n(('note:高速化したい場面'))
@@ -233,14 +233,55 @@ Not bad but has some verbosities because of C\n
   * Boost.Python: ((*C++*)) + Python
   * pybind11: ((*C++*))11 + Python
 
-= Convenient API and C++\n(('note:便利なAPIとC++'))
+= Useful C++ properties\n(('note:C++の便利の性質'))
 
   * C++ can use C API directory\n
     (('note:C++ではCのAPIを直接使える'))
     * No need wrapper API nor libffi\n
       (('note:ラッパーAPIもlibffiもいらない'))
-  * C++ has many convenient features\n
-    (('note:C++には便利機能がたくさんある'))
+  * C++((*11 or later*)) has many convenient features\n
+    (('note:C++11以降には便利機能がたくさんある'))
+
+= C++ convenient feature1\n(('note:C++の便利機能1'))
+
+(('tag:center'))
+Type detection by auto (C++11)\n
+(('note:autoで型推論'))
+
+  # coderay cpp
+
+  int n = 10;
+  auto square = n * n;
+  // square's type is "int"
+  // squareの型は「int」
+
+= C++ convenient feature2\n(('note:C++の便利機能2'))
+
+(('tag:center'))
+Lambda expression (C++11)\n
+(('note:（ラムダ式）'))
+
+  # coderay cpp
+
+  // In Ruby: ->(n) {n * n}
+  auto square = [](int n) {
+    return n * n; // Return type is detected
+  };
+  square(10); // => 100
+
+= C++ convenient feature3\n(('note:C++の便利機能3'))
+
+(('tag:center'))
+Default argument\n
+(('note:（デフォルト引数）'))
+
+  # coderay cpp
+
+  // In Ruby: def square(n=10)
+  int square(int n=10) {
+    return n * n;
+  }
+  // square() == square(10)
 
 = Convenient API example1\n(('note:便利なAPI例1'))
 
@@ -271,6 +312,7 @@ Not bad but has some verbosities because of C\n
   // C++: Ext++
   #include <ruby.hpp>
   extern "C" void Init_sample(void) {
+    // Parent class (rb_cObject) is omittable
     rb::Class("Sample"). // class Sample in Ruby
       define_method("hello", // def hello in Ruby
         [](VALUE self) { // ->() {"Hello"} in Ruby
@@ -288,12 +330,222 @@ Not bad but has some verbosities because of C\n
     return rb_str_new_static("Hello");
   } /* ↑Definition. */
   void Init_sample(void) {
+    /* ↓Must specify parent class. */
     VALUE sample = rb_define_class("Sample", rb_cObject);
     /* ↓Registration. They are separated. */
     rb_define_method(sample, "hello", rb_sample_hello, 0);
   }
 
+= C++ convenient feature4\n(('note:C++の便利機能4'))
+
+(('tag:center'))
+Custom type conversion\n
+(('note:（型変換のカスタマイズ）'))
+
+  * "Cast" is customizable\n
+    (('note:「キャスト」をカスタマイズできるということ'))
+
+= Custom type conversion\n(('note:（型変換のカスタマイズ）'))
+
+  # coderay cpp
+
+  // Wrapper class of VALUE
+  class Object {
+  public:
+    // def initialize(rb_object)
+    //   @rb_object_ = rb_object
+    // end
+    Object(VALUE rb_object) : rb_object_(rb_object) {}
+  private:
+    VALUE rb_object_;
+  };
+
+= Custom type conversion\n(('note:（型変換のカスタマイズ）'))
+
+  # coderay cpp
+
+  class Object {
+    operator bool() const {
+      return RTEST(rb_object_);
+    }
+  };
+  // Object nil(Qnil); // Qnil wrapper
+  // if (nil) { → if (RTEST(Qnil)) {
+
+= Custom type conversion\n(('note:（型変換のカスタマイズ）'))
+
+  # coderay cpp
+
+  // Trap1（罠1）
+  // bool→int cast is available
+  // Implicit Object→bool→ int cast
+  // bool→intのキャストができるので
+  // 暗黙的にObject→bool→intとキャスト
+  Object(Qture) + 1; // → RTEST(Qtrue) + 1
+                     // → 1 + 1
+                     // → 2
+
+= Custom type conversion\n(('note:（型変換のカスタマイズ）'))
+
+  # coderay cpp
+
+  class Object {
+    // Deny explicit cast (C++11)
+    // 暗黙のキャストを禁止（C++11）
+    explicit operator bool() const {
+      return RTEST(rb_object_);
+    }
+  };
+  // Object(Qtrue) + 1; // → Compile error
+
+= Custom type conversion\n(('note:（型変換のカスタマイズ）'))
+
+  # coderay cpp
+
+  // Trap2（罠2）
+  class Object {
+  public:
+    // Used as implicit VALUE→Object cast
+    // 暗黙のVALUE→Objectキャストに使われる
+    Object(VALUE rb_object);
+  };
+
+= Custom type conversion\n(('note:（型変換のカスタマイズ）'))
+
+  # coderay cpp
+
+  // Trap2（罠2）
+  // VALUE is just a number（VALUEはただの数値）
+  typedef unsigned long VALUE;
+  Object identify(Object x) {return x;}
+  // Implicit VALUE→Object cast
+  // 暗黙的にVALUE→Objectとキャスト
+  identify(100); // == identify(Object(100));
+
+= Custom type conversion\n(('note:（型変換のカスタマイズ）'))
+
+  # coderay cpp
+
+  class Object {
+    // Deny explicit cast
+    // 暗黙のキャストを禁止
+    explicit Object(VALUE rb_object);
+  };
+  // identify(100); // → Compile error
+
+= Custom type conversion\n(('note:（型変換のカスタマイズ）'))
+
+  # coderay cpp
+
+  class Object {
+    operator VALUE() const {return rb_object_;}
+  };
+  // Convenient（便利）
+  rb_p(Object(Qnil)); // → rb_p(Qnil);
+  // Not compile error. Hmm...
+  Object(Qnil) + 1;   // → Qnil + 1;
+                      // → 8 + 1;
+                      // → 9;
+
+= C++ convenient feature6\n(('note:C++の便利機能6'))
+
+(('tag:center'))
+Template and specialization\n
+(('note:（テンプレートと特殊化）'))
+
+  * Usable for consistent cast API\n
+    (('note:一貫性のあるキャストAPIに使える'))
+
+= Consistent cast API\n(('note:一貫性のあるキャストAPI'))
+
+  # coderay cpp
+
+  namespace rb {
+    // Consistent cast API
+    // Example: rb::cast<int32_t>(Object(NUM2INT(10));
+    // Example: rb::cast<Object>(10);
+    // FYI: C++ cast syntax: static_cast<TYPE>(expression)
+    template <typename RETURN_TYPE,
+              typename ARGUMENT_TYPE>
+    inline RETURN_TYPE cast(ARGUMENT_TYPE object);
+  }
+
+= Consistent cast API\n(('note:一貫性のあるキャストAPI'))
+
+  # coderay cpp
+
+  template <> // rb::cast<int32_t>(Object(NUM2INT(10));
+  inline int32_t cast<int32_t, Object>(Object rb_object) {
+    return NUM2INT(rb_object);
+  }
+  template <> // rb::cast<Object>(10);
+  inline Object cast<Object, int32_t>(int32_t n) {
+    return Object(INT2NUM(n));
+  }
+
+= Consistent cast API\n(('note:一貫性のあるキャストAPI'))
+
+  # coderay cpp
+
+  // rb::cast<const char *>(Object(rb_str_new_cstr("X"));
+  template <> inline
+  const char *cast<const char *, Object>(Object rb_object) {
+    VALUE rb_object_raw = rb_object;
+    return StringValueCStr(rb_object_raw);
+  }
+  template <> inline // rb::cast<Object>("hello");
+  Object cast<Object, const char *>(const char *c_string) {
+    return Object(rb_str_new_cstr(c_string));
+  }
+
+= C++ convenient feature5\n(('note:C++の便利機能5'))
+
+(('tag:center'))
+Initializer list (C++11)\n
+(('note:初期化リスト（C++11）'))
+
+  * "{A, B, C, ...}" is customizable\n
+    (('note:「{A, B, C, ...}」をカスタマイズできる'))
+
+= Initializer list\n(('note:初期化リスト'))
+
+  # coderay cpp
+
+  Object Object::send(
+    ID name_id, std::initializer_list<VALUE> args);
+  // Ruby: "hello".send(:tr, "e", "E")
+  Object(rb_str_new_cstr("hello")).
+    send(rb_intern("tr"),
+         {rb_str_new_cstr("e"),
+          rb_str_new_cstr("E")});
+
+= Initializer list\n(('note:初期化リスト'))
+
+  # coderay cpp
+
+  Object Object::send(
+    ID name_id,
+    std::initializer_list<VALUE> args,
+    VALUE (*block)(VALUE data));
+  // Ruby: array.send(:collect) {true}
+  Object(array).
+    send(rb_intern("collect"),
+         {}, // Clear API than variable arguments
+         [](VALUE data) {return Qtrue;});
+
 = Convenient API example2\n(('note:便利なAPI例2'))
+
+  # coderay cpp
+
+  // C++: Ext++
+  rb::Object(rb_n).
+    send("step",
+         // Implicit Object→VALUE cast
+         {rb::cast<rb::Object>(10)},
+         [](VALUE i) {return rb_p(i)});
+  // n.step(10) {|i| p i}
+
+= Convenient API example3\n(('note:便利なAPI例3'))
 
   # coderay cpp
 
@@ -307,41 +559,6 @@ Not bad but has some verbosities because of C\n
     Rice::define_class("Sample").
       define_method("hello", &rb_sample_hello);
   }
-
-= Convenient C++ API1\n(('note:便利なC++ API1'))
-
-  * Default arguments(('note:（デフォルト引数）'))
-    * Parent class is omittable\n
-      (('note:RubyのAPIのように親クラスを省略可能'))
-  * Template(('note:（テンプレート）'))
-    * Auto C/C++ <-> Ruby convert\n
-      (('note:C/C++↔Ruby間の自動変換'))
-
-= Convenient API example3
-
-  # coderay cpp
-
-  // C++11
-  #include <iostream>
-  #include <xtensor/xarray.hpp>
-  int main(void) {
-    xt::xarray<double> array = {1.0, 2.0, 3.0};
-    // Type deduction. Operator overloading.
-    auto result = (array + 2.0) * 3.0; // element-wise ops
-    for (const auto &element : result) { // result.each {}
-      std::cout << element << std::endl; // 9 12 15
-    }
-    return 0;
-  }
-
-= Convenient C++ API2\n(('note:便利なC++ API2'))
-
-  * auto: Type deduction(('note:（型推論）'))
-    * Simpler code\n
-      (('note:コードがシンプルになる'))
-  * Range-based for loop(('note:（範囲forループ）'))
-    * Simpler code\n
-      (('note:コードがシンプルになる'))
 
 = C++ based API: Pros1\n(('note:C++ベースのAPI：長所1'))
 
@@ -410,7 +627,7 @@ Easy to optimize\n
 
   # coderay cpp
 
-  // Rice
+  // C++: Rice
   cHello.
     define_method(
       "hello",
@@ -477,7 +694,7 @@ Easy to optimize\n
   # coderay ruby
 
   # Define only benchmark code in Ruby.
-  # Real benchmark code is in C++.
+  # Benchmark target code is in C++.
   n = 10000
   Bench = Class.new do
     n.times do |i|
@@ -491,7 +708,7 @@ Easy to optimize\n
   # coderay ruby
 
   # Call benchmark code in Ruby.
-  # Real benchmark code is in C++.
+  # Benchmark target code is in C++.
   n = 10000
   bench = Bench.new
   n.times do |i|
@@ -504,8 +721,8 @@ Easy to optimize\n
 
   Type, Define only, Called
 
-  Normal, 0.005675s, 0.005625s
-  Lazy,   0.001142s, 0.005674s
+  Normal, 5ms, 5ms
+  Lazy,   1ms, 5ms
 
 (('tag:center'))
 5x faster when any methods aren't called\n
