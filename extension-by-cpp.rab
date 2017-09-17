@@ -345,7 +345,7 @@ Custom type conversion\n
   * "Cast" is customizable\n
     (('note:「キャスト」をカスタマイズできるということ'))
 
-= Custom type conversion\n(('note:（型変換のカスタマイズ）'))
+= Custom type conversion\n(('note:型変換のカスタマイズ'))
 
   # coderay cpp
 
@@ -360,7 +360,7 @@ Custom type conversion\n
     VALUE rb_object_;
   };
 
-= Custom type conversion\n(('note:（型変換のカスタマイズ）'))
+= Custom type conversion\n(('note:型変換のカスタマイズ'))
 
   # coderay cpp
 
@@ -372,7 +372,7 @@ Custom type conversion\n
   // Object nil(Qnil); // Qnil wrapper
   // if (nil) { → if (RTEST(Qnil)) {
 
-= Custom type conversion\n(('note:（型変換のカスタマイズ）'))
+= Custom type conversion\n(('note:型変換のカスタマイズ'))
 
   # coderay cpp
 
@@ -385,7 +385,7 @@ Custom type conversion\n
                      // → 1 + 1
                      // → 2
 
-= Custom type conversion\n(('note:（型変換のカスタマイズ）'))
+= Custom type conversion\n(('note:型変換のカスタマイズ'))
 
   # coderay cpp
 
@@ -398,7 +398,7 @@ Custom type conversion\n
   };
   // Object(Qtrue) + 1; // → Compile error
 
-= Custom type conversion\n(('note:（型変換のカスタマイズ）'))
+= Custom type conversion\n(('note:型変換のカスタマイズ'))
 
   # coderay cpp
 
@@ -410,7 +410,7 @@ Custom type conversion\n
     Object(VALUE rb_object);
   };
 
-= Custom type conversion\n(('note:（型変換のカスタマイズ）'))
+= Custom type conversion\n(('note:型変換のカスタマイズ'))
 
   # coderay cpp
 
@@ -422,7 +422,7 @@ Custom type conversion\n
   // 暗黙的にVALUE→Objectとキャスト
   identify(100); // == identify(Object(100));
 
-= Custom type conversion\n(('note:（型変換のカスタマイズ）'))
+= Custom type conversion\n(('note:型変換のカスタマイズ'))
 
   # coderay cpp
 
@@ -433,7 +433,7 @@ Custom type conversion\n
   };
   // identify(100); // → Compile error
 
-= Custom type conversion\n(('note:（型変換のカスタマイズ）'))
+= Custom type conversion\n(('note:型変換のカスタマイズ'))
 
   # coderay cpp
 
