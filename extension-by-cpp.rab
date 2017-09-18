@@ -259,7 +259,7 @@ Type detection with "auto"\n
 
 (('tag:center'))
 Lambda expression (C++11)\n
-(('note:（ラムダ式）'))
+(('note:ラムダ式（C++11）'))
 
   # coderay cpp
 
@@ -273,7 +273,7 @@ Lambda expression (C++11)\n
 
 (('tag:center'))
 Default argument\n
-(('note:（デフォルト引数）'))
+(('note:デフォルト引数'))
 
   # coderay cpp
 
