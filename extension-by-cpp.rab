@@ -45,7 +45,7 @@
   * Project that provides data processing tools for Ruby\n
     (('note:Ruby用のデータ処理ツール群を提供するプロジェクト'))
     * https://red-data-tools.github.io/
-  * Workshop in afternoon break at the 2nd day (today!)\n
+  * Workshop during the afternoon break on the 2nd day (today!)\n
     (('note:2日目（今日！）の午後休憩中にワークショップがあるよ！'))
 
 = Ad4: OSS Gate
@@ -56,21 +56,21 @@
 
 = Ad4: OSS Gate
 
-  * Ruby is an OSS\n
+  * Ruby is OSS\n
     (('note:RubyもOSS'))
     * OSS Gate wants to increase people to join Ruby itself and RubyGems development!\n
       (('note:OSS GateではRuby本体の開発や各種RubyGemの開発に参加する人も増やしたい！'))
 
 = Ad4: OSS Gate
 
-  * Now, works on Tokyo, Sapporo, Osaka and Kyoto\n
+  * Now, in Tokyo, Sapporo, Osaka and Kyoto\n
     (('note:現在は東京・札幌・大阪・京都で活動中'))
-    * If you live at one of them, join "OSS Gate workshop"!\n
+    * If you live near by, join "OSS Gate workshop"!\n
       (('note:これらの地域に住んでいる人は「OSS Gateワークショップ」に参加しよう！'))
 
 = Ad4: OSS Gate
 
-  * Wants to work on Hiroshima and other areas all over the world!\n
+  * Want to expand to Hiroshima and other areas all over the world!\n
     (('note:広島や世界中のいろんな地域で活動したい！'))
     * If you're interested in increasing people who join OSS development, talk to me!\n
       (('note:OSSの開発に参加する人が増えることに興味のある人は私に声をかけて！'))
@@ -82,10 +82,10 @@ Improve performance\n
 with C/C++ libraries\n
 (('note:C/C++のライブラリーを使った高速化'))
 
-  * Not want to create binding\n
+  * Not create binding\n
     (('note:バインディングを作りたいわけじゃない'))
 
-= Point of improve perf\n(('note:高速化するために大事なこと'))
+= Point of improving perf\n(('note:高速化するために大事なこと'))
 
 (('tag:center'))
 Done in C/C++\n
@@ -118,7 +118,7 @@ as much as possible\n
   # 50x faster（50倍速い）
   numbers.inject(:+)
 
-= Extension and binding\n(('note:バインディングと拡張ライブラリー'))
+= Extension and binding\n(('note:拡張ライブラリーとバインディング'))
 
   * Extension(('note:（拡張ライブラリー）'))
     * Ruby library implemented in C\n
@@ -148,7 +148,7 @@ as much as possible\n
   context.show_page                     # API
   s.finish                              # API
 
-= Point of improve perf\n(('note:高速化するために大事なこと'))
+= Point of improving perf\n(('note:高速化するために大事なこと'))
 
 (('tag:center'))
 Done in C/C++\n
@@ -159,7 +159,7 @@ as much as possible\n
     C/C++ and Ruby\n
     (('note:C/C++とRuby間でいったりきたりしない'))
 
-= Improve perf example\n(('note:高速化例'))
+= Perf improvement example\n(('note:高速化例'))
 
   # coderay ruby
 
@@ -180,7 +180,7 @@ Improve performance\n
 with C/C++ libraries\n
 (('note:C/C++のライブラリーを使った高速化'))
 
-  * Not want to create binding\n
+  * Not create binding\n
     (('note:バインディングを作りたいわけじゃない'))
 
 = Use case\n(('note:高速化したい場面'))
@@ -193,7 +193,7 @@ with C/C++ libraries\n
 = Raw C API for extension\n(('note:拡張ライブラリー用の生のC API'))
 
 (('tag:center'))
-Not bad but has some verbosities because of C\n
+Not bad but can be verbose because of C\n
 (('note:悪くないんだけどCなので冗長'))
 
   * Need better approach\n
@@ -212,7 +212,7 @@ Not bad but has some verbosities because of C\n
 
   * Extend language to support writing extension\n
     (('note:拡張ライブラリーを書けるように言語を拡張'))
-  * Based on not C language\n
+  * Not based on C\n
     (('note:C以外の言語を使う'))
   * Provide convenient API\n
     (('note:便利APIを提供'))
@@ -221,7 +221,7 @@ Not bad but has some verbosities because of C\n
 
   * Extend language to support writing extension\n
     (('note:拡張ライブラリーを書けるように言語を拡張'))
-  * Based on not C language\n
+  * Not based on C\n
     (('note:C以外の言語を使う'))
   * ((*Provide convenient API*))\n
     (('note:便利APIを提供'))
@@ -237,7 +237,7 @@ Not bad but has some verbosities because of C\n
 
   * C++ can use C API directory\n
     (('note:C++ではCのAPIを直接使える'))
-    * No need wrapper API nor libffi\n
+    * No wrapper API or libffi\n
       (('note:ラッパーAPIもlibffiもいらない'))
   * C++((*11 or later*)) has many convenient features\n
     (('note:C++11以降には便利機能がたくさんある'))
@@ -245,8 +245,8 @@ Not bad but has some verbosities because of C\n
 = C++ convenient feature1\n(('note:C++の便利機能1'))
 
 (('tag:center'))
-Type detection by auto (C++11)\n
-(('note:autoで型推論'))
+Type detection with "auto"\n
+(('note:autoで型推論（C++11）'))
 
   # coderay cpp
 
@@ -340,7 +340,7 @@ Default argument\n
 
 (('tag:center'))
 Custom type conversion\n
-(('note:（型変換のカスタマイズ）'))
+(('note:型変換のカスタマイズ'))
 
   * "Cast" is customizable\n
     (('note:「キャスト」をカスタマイズできるということ'))
@@ -447,13 +447,13 @@ Custom type conversion\n
                       // → 8 + 1;
                       // → 9;
 
-= C++ convenient feature6\n(('note:C++の便利機能6'))
+= C++ convenient feature5\n(('note:C++の便利機能5'))
 
 (('tag:center'))
 Template and specialization\n
-(('note:（テンプレートと特殊化）'))
+(('note:テンプレートと特殊化'))
 
-  * Usable for consistent cast API\n
+  * 👍Consistent cast API\n
     (('note:一貫性のあるキャストAPIに使える'))
 
 = Consistent cast API\n(('note:一貫性のあるキャストAPI'))
@@ -498,21 +498,22 @@ Template and specialization\n
     return Object(rb_str_new_cstr(c_string));
   }
 
-= C++ convenient feature5\n(('note:C++の便利機能5'))
+= C++ convenient feature6\n(('note:C++の便利機能6'))
 
 (('tag:center'))
 Initializer list (C++11)\n
 (('note:初期化リスト（C++11）'))
 
-  * "{A, B, C, ...}" is customizable\n
-    (('note:「{A, B, C, ...}」をカスタマイズできる'))
+  * "{A,B,...}" is customizable\n
+    (('note:「{A, B, ...}」をカスタマイズできる'))
 
 = Initializer list\n(('note:初期化リスト'))
 
   # coderay cpp
 
   Object Object::send(
-    ID name_id, std::initializer_list<VALUE> args);
+    ID name_id,
+    std::initializer_list<VALUE> args);
   // Ruby: "hello".send(:tr, "e", "E")
   Object(rb_str_new_cstr("hello")).
     send(rb_intern("tr"),
@@ -563,7 +564,7 @@ Initializer list (C++11)\n
 = C++ based API: Pros1\n(('note:C++ベースのAPI：長所1'))
 
 (('tag:center'))
-Easy to write than C\n
+Easier to write than C\n
 (('note:Cより書きやすい'))
 
   * Require C++11 or later\n
@@ -575,7 +576,7 @@ Easy to write than C\n
 Easy to use for C API users\n
 (('note:既存のC APIを使っている人なら使いやすい'))
 
-  * Can use C directly incl macro\n
+  * Use C directly incl macro\n
     (('note:マクロも含めてCの機能を直接使える'))
   * Don't need to migrate to all convenient API at once\n
     (('note:一気に書き換えるのではなく徐々に移行できる'))
@@ -754,7 +755,7 @@ Slower build\n
 Exception\n
 (('note:例外'))
 
-  * Ruby exception breaks C++ RAII (destructor)\n
+  * Ruby exception breaks C++ RAII (destructor)\n(('note:(Resource Acquisition Is Initialization)'))\n
     (('note:Rubyの例外発生→C++のRAII（デストラクター）が動かない'))
     * Because it uses setjmp/longjmp\n
       (('note:Rubyの例外はsetjmp/longjmpを使っているから'))
@@ -795,7 +796,7 @@ Introduce easy to write extension approaches\n
 
   * Extend language to support writing extension\n
     (('note:拡張ライブラリーを書けるように言語を拡張'))
-  * Based on not C language\n
+  * Not based on C\n
     (('note:C以外の言語を使う'))
   * Provide convenient API\n
     (('note:便利APIを提供'))
@@ -809,9 +810,9 @@ Introduce easy to write extension approaches\n
 
 = How to run\n(('note:動かし方'))
 
-  * Compile code for extended language to C\n
+  * Translate extension code to C\n
     (('note:拡張言語で書かれたコードをCにコンパイル'))
-  * Build compiled C code\n
+  * Compile C code\n
     (('note:コンパイルされたCコードをビルド'))
   * Load the built extension\n
     (('note:ビルドした拡張ライブラリーを読み込む'))
@@ -851,30 +852,31 @@ Introduce easy to write extension approaches\n
 = Extend language: Pros1\n(('note:拡張言語：長所1'))
 
 (('tag:center'))
-Friendly syntax for base language users\n
+Friendly syntax for\n
+base language users\n
 (('note:ベースの言語のユーザーにはなじみやすい構文'))
 
-  * Most syntaxes are same\n
+  * Most syntax is the same\n
     (('note:構文の大部分は同じだから'))
 
-= Extend language: Pros\n(('note:拡張言語：長所2'))
+= Extend language: Pros2\n(('note:拡張言語：長所2'))
 
 (('tag:center'))
 Easy to migrate from base lang\n
 (('note:ベースの言語からの移行が容易'))
 
-  * Because upper compatibility\n
+  * Because upward compatibility\n
     (('note:上位互換だから'))
   * Code for base language works without modification\n
     (('note:ベースの言語で書かれたコードは変更なしで動く'))
 
-= Extend language: Pros\n(('note:拡張言語：長所3'))
+= Extend language: Pros3\n(('note:拡張言語：長所3'))
 
 (('tag:center'))
-Don't require large C knowledge\n
+Doesn't require much C knowledge\n
 (('note:そんなにCの知識は必要ない'))
 
-  * Most codes can be written with base language knowledge\n
+  * Most code can be written with base language knowledge\n
     (('note:コードの大部分はベースの言語の知識で書ける'))
 
 = Extend language: Cons1\n(('note:拡張言語：短所1'))
@@ -901,14 +903,14 @@ Difficult to debug\n
 = Extend language: Cons3\n(('note:拡張言語：短所2'))
 
 (('tag:center'))
-Need many works to maintain\n
+Hard to maintain\n
 (('note:(For maintainers, not for users)'))\n
 (('note:（ユーザーではなくメンテナーが）メンテナンスが大変'))
 
   * Base language introduces a new syntax then extend language should implement it\n
     (('note:ベースの言語が新しい構文を導入→拡張言語でも実装'))
 
-= Based on not C language\n(('note:C言語以外をベースにする'))
+= Not based on C\n(('note:C言語以外をベースにする'))
 
   * JRuby: Java + Ruby
   * Helix: Rust + Ruby
@@ -936,27 +938,28 @@ Need many works to maintain\n
   java_import "Fibonacci"
   p Fibonacci.new.compute(100)
 
-= Based on not C: Pros1\n(('note:C言語以外をベースにする：長所1'))
+= Not based on C: Pros1\n(('note:C言語以外をベースにする：長所1'))
 
 (('tag:center'))
-Easy to write than C\n
+Easier to write than C\n
 (('note:Cより書きやすい'))
 
   * Simpler syntax\n
     (('note:洗練された構文'))
-  * Rich features than C\n
+  * Rich features compared to C\n
     (('note:Cより機能が多い'))
 
-= Based on not C: Pros2\n(('note:C言語以外をベースにする：長所2'))
+= Not based on C: Pros2\n(('note:C言語以外をベースにする：長所2'))
 
 (('tag:center'))
-Can use libraries in base language\n
+Can use libraries\n
+in base language\n
 (('note:ベース言語のライブラリーを使える'))
 
-  * Major languages have many libraries\n
+  * Major languages have many libs\n
     (('note:広く使われている言語はライブラリーも多い'))
 
-= Based on not C: Cons1\n(('note:C言語以外をベースにする：短所1'))
+= Not based on C: Cons1\n(('note:C言語以外をベースにする：短所1'))
 
 (('tag:center'))
 Need base language knowledge\n
@@ -965,7 +968,7 @@ Need base language knowledge\n
   * Java for JRuby(('note:（JRubyならJava）'))
   * Rust for Helix(('note:（HelixならRust）'))
 
-= Based on not C: Cons2\n(('note:C言語以外をベースにする：短所2'))
+= Not based on C: Cons2\n(('note:C言語以外をベースにする：短所2'))
 
 (('tag:center'))
 May need C knowledge\n
@@ -977,10 +980,10 @@ May need C knowledge\n
     * e.g.: (({sys::RSTRING_PTR})) on Helix\n
       (('note:例：Helixならsys::RSTRING_PTRがラップしたAPI'))
 
-= Based on not C: Cons3\n(('note:C言語以外をベースにする：短所3'))
+= Not based on C: Cons3\n(('note:C言語以外をベースにする：短所3'))
 
 (('tag:center'))
-May need many works to maintain\n
+Hard to maintain\n
 (('note:(When Ruby implementation is MRI)'))\n
 (('note:Rubyの実装がMRIならメンテナンスが大変かも'))
 
@@ -991,7 +994,7 @@ May need many works to maintain\n
 = Provide convenient API\n(('note:便利なAPIを提供'))
 
   * Rice: C++ + Ruby
-  * Ext++: C++ + Ruby
+  * Ext++: C++11 + Ruby
   * Boost.Python: C++ + Python
   * pybind11: C++11 + Python
 
@@ -1049,8 +1052,9 @@ Omit\n
 Conv from Ruby may be a bother\n
 (('note:Ruby実装の移植が面倒'))
 
-  * C++ with convenient Ruby C API needs more codes than Ruby\n
-    (('note:RubyのC APIにC++の便利APIがあってもRubyよりもたくさんコードが必要'))
+  * C++ with convenient Ruby C API needs more code than Ruby\n
+    (('note:RubyのC APIにC++の便利APIがあっても'))\n
+    (('note:Rubyよりもたくさんコードが必要'))
 
 = From Ruby: Rice\n(('note:RubyからRiceに移植'))
 
